@@ -89,14 +89,69 @@ class DocView(ttk.Frame):
             self.canvas.yview_scroll(step, "units")
 
     def _reflow(self) -> None:
-        """Re-fit text blocks to the current viewport width."""
+        """Re-fit text blocks to the current viewport width.
+
+        `pack(fill="x")` already stretches each Text to the canvas width,
+        so the wrap is final here; we only need to re-collapse the height
+        to the new display-line count. Setting `width` is intentionally
+        avoided — forcing a requested width fights the packer and can
+        create a resize feedback loop.
+        """
         w = self.canvas.winfo_width()
         if w < 40:
             return
-        for txt, size in self._sized:
-            chars = max(20, int(w / (size * 0.62)))
-            if int(txt.cget("width")) != chars:
-                txt.configure(width=chars)
+        for txt, _size in self._sized:
+            self._size_to_content(txt)
+
+    def _display_lines(self, t, end: str = "end-1c") -> int:
+        """Number of wrapped display lines in a tk.Text (portable idiom).
+
+        `Text.count(..., 'displaylines')` is unreliable on this Tk build
+        (returns None/off-by-one for disabled widgets), so walk indices.
+        """
+        n, idx = 1, "1.0"
+        while True:
+            nxt = t.index(f"{idx}+1displayline")
+            if t.compare(nxt, ">=", end):
+                break
+            n += 1
+            idx = nxt
+        return n
+
+    def _size_to_content(self, t) -> None:
+        """Shrink a read-only tk.Text to its actual display height.
+
+        Only meaningful once the widget's width is settled (mapped:
+        ``pack(fill="x")`` stretch; unmapped: requested width); the
+        ``<Configure>`` binding re-runs it when the width finally is.
+        Re-enables state only to set `height`, then restores `disabled`.
+        """
+        was_disabled = str(t.cget("state")) == "disabled"
+        if was_disabled:
+            t.configure(state="normal")
+        t.configure(height=max(1, self._display_lines(t)))
+        if was_disabled:
+            t.configure(state="disabled")
+
+    def _bind_recollapse(self, txt) -> None:
+        """Re-collapse *txt* whenever its actual width changes.
+
+        The first ``<Configure>`` arrives when the widget's width settles
+        (mapped: stretched to the canvas by ``pack(fill="x")``; unmapped:
+        its requested width) — the point at which a display-line count is
+        finally meaningful. A later event with the *same* width is the
+        echo of our own ``height`` update and is skipped, so no loop.
+        """
+        txt._last_width = -1
+        txt.bind("<Configure>", lambda e, t=txt: self._reconfigure_text(t, e))
+
+    def _reconfigure_text(self, txt, event) -> None:
+        if event.width == txt._last_width:
+            return
+        txt._last_width = event.width
+        if event.width < 40:
+            return
+        self._size_to_content(txt)
 
     # ------------------------------------------------------------- public API
     def render(self, md_text: str) -> None:
@@ -149,11 +204,13 @@ class DocView(ttk.Frame):
         txt.tag_configure("code", font=(CODE_FONT, size), background=CODE_BG)
         txt.tag_configure("strong", font=(UI_FONT, size, "bold"))
         txt.tag_configure("em", font=(UI_FONT, size, "italic"))
+        self._bind_recollapse(txt)
         for style, text in inlines:
             txt.insert("end", text, style if style != "plain" else ())
         txt.configure(state="disabled")
         self._text_widgets.append(txt)
         self._sized.append((txt, size))
+        self._size_to_content(txt)  # collapse to content height, not 24 lines
         return txt
 
     def _add_heading(self, b: Heading) -> None:
@@ -205,10 +262,13 @@ class DocView(ttk.Frame):
             padx=6,
             pady=4,
         )
+        self._bind_recollapse(txt)
         txt.insert("1.0", b.text)
         txt.configure(state="disabled")
         txt.pack(fill="x", padx=8, pady=3)
         self._text_widgets.append(txt)
+        self._sized.append((txt, 9))  # keep in _sized so _reflow re-sizes it
+        self._size_to_content(txt)
 
     # ----------------------------------------------------------------- tables
     def _col_width(self, texts: list) -> int:
