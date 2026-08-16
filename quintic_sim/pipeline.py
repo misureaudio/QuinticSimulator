@@ -255,7 +255,7 @@ def simulate(
     match_tol = 6 if nr.source == "numpy-fallback" else 25
     verdicts = stage(
         "S6", "verification gate",
-        lambda: gate.run(f, exact_roots, nr.abarth, match_tol=match_tol),
+        lambda: gate.run(f, exact_roots, nr.aberth, match_tol=match_tol),
         f"residual < 1e-30 (40 digits) + cross-match vs {nr.source} to "
         f"1e-{match_tol} for {len(exact_roots)} exact roots.",
     )

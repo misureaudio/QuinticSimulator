@@ -28,8 +28,8 @@ DURAND_TOL = 1e-30
 
 @dataclass
 class NumericResult:
-    abarth: Tuple[object, ...]          # mpmath mpc, arbitrary precision
-    source: str                         # "abarth" | "numpy-fallback"
+    aberth: Tuple[object, ...]          # mpmath mpc, arbitrary precision
+    source: str                         # "aberth" | "numpy-fallback"
     numpy_eigs: Tuple[complex, ...]     # machine-precision cross-check
     numpy_match: bool                   # agree to ~1e-8
     durand_roots: Tuple[object, ...]    # mpmath mpc
@@ -117,20 +117,20 @@ def numeric_roots(f: sp.Poly, dps: int = 50) -> NumericResult:
     )
 
     # --- primary: mpmath Aberth ---
-    source = "abarth"
+    source = "aberth"
     try:
         with mpmath.workdps(dps):
-            abarth = tuple(
+            aberth = tuple(
                 mpmath.polyroots(coeffs, maxsteps=200, cleanup=True)
             )
     except Exception:  # noqa: BLE001 — NoConvergence on multiple roots
         source = "numpy-fallback"
-        abarth = eigs_mp
+        aberth = eigs_mp
 
     # match to ~1e-8 (machine precision vs 50-digit Aberth)
     with mpmath.workdps(30):
         a = sorted(
-            (float(mpmath.re(z)), float(mpmath.im(z))) for z in abarth
+            (float(mpmath.re(z)), float(mpmath.im(z))) for z in aberth
         )
     n_sorted = sorted((z.real, z.imag) for z in eigs)
     match = all(
@@ -142,7 +142,7 @@ def numeric_roots(f: sp.Poly, dps: int = 50) -> NumericResult:
     d_roots, d_iter, d_hist = durand_kerner(coeffs)
 
     return NumericResult(
-        abarth=abarth,
+        aberth=aberth,
         source=source,
         numpy_eigs=eigs,
         numpy_match=bool(match),

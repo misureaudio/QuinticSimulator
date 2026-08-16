@@ -37,7 +37,7 @@ class Report:
     step_traces: List[StepTrace]
     sage: Optional[dict] = None                   # cross-check result (if run)
     special: Optional[dict] = None                # bring_radical / klein (S4b)
-    numeric_source: str = "abarth"                # S5 primary method used
+    numeric_source: str = "aberth"                # S5 primary method used
     durand_iterations: Optional[int] = None       # S5 educational trace
 
     # ---------- JSON ----------
@@ -152,7 +152,7 @@ class Report:
         src = self.numeric_source
         src_txt = (
             "mpmath **Aberth** method (50-digit arbitrary precision)"
-            if src == "abarth"
+            if src == "aberth"
             else "NumPy **companion-matrix** eigenvalues (machine "
                  "precision — Aberth did not converge on multiple roots)"
         )
