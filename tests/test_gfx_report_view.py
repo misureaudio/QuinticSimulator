@@ -103,3 +103,20 @@ def test_real_report_fixture_renders():
     assert len(v._treeviews[0].get_children()) == 5   # roots
     assert len(v._treeviews[1].get_children()) == 9   # step trace
     r.destroy()
+
+
+def test_heading_is_compact_not_24_lines():
+    """A 1-line heading must occupy ~1 line, not the 24-line Text default."""
+    r = _root()
+    v = DocView(r)
+    v.render("# Short Title\n\n| a | b |\n|---|---|\n| 1 | 2 |\n")
+    r.update_idletasks()
+    r.update()
+    headings = [w for w in v.inner.winfo_children() if w.winfo_class() == "Text"]
+    assert headings, "expected a Text heading widget"
+    h1 = headings[0]
+    # default-buggy height for a size-18 heading is ~900px; compact is <120px
+    assert h1.winfo_height() < 120, f"heading too tall: {h1.winfo_height()}px"
+    # the whole document must be far smaller than the 10760px buggy case
+    assert v.inner.winfo_height() < 2500, f"document too tall: {v.inner.winfo_height()}px"
+    r.destroy()
