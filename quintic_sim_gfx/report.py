@@ -102,7 +102,7 @@ class Report:
             L.append("## Galois group (S3)")
             L.append("")
             L.append(f"**Group:** {g.name} (order {g.order}, "
-                     f"{'⊆' if g.in_A5 else '⊄'} A5, "
+                     f"{'⊆' if g.in_A5 else 'not a subgroup of'} A5, "
                      f"{'solvable' if g.solvable else 'NOT solvable'})")
             L.append(f"**Discriminant:** {g.discriminant} "
                      f"({'square' if g.disc_square else 'not a square'})")
