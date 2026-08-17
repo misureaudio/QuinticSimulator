@@ -21,6 +21,15 @@ The bridge is strictly optional: without Docker (or the image) it returns
 status "skipped" and never raises. A timeout or malformed output returns
 status "error". The pipeline treats a SymPy/Sage disagreement as CONFLICT
 and falls back to numerics only.
+
+Encoding note: the docker subprocess is read as **bytes** and decoded
+UTF-8 with ``errors="replace"`` (never ``text=True``). On Windows,
+``docker`` is a console proxy that re-encodes the container's output
+through the console codepage; on a cp1252 console the substituted bytes
+contain 0x90 (undefined in cp1252), so a locale-based ``text=True``
+decode raises ``UnicodeDecodeError`` in the reader thread and kills the
+Sage cross-check. ``errors="replace"`` guarantees the decode cannot
+raise; the JSON payload itself is pure ASCII and survives intact.
 """
 
 from __future__ import annotations
@@ -117,7 +126,7 @@ def classify_with_sage(
     t0 = time.time()
     try:
         proc = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=timeout
+            cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout
         )
     except subprocess.TimeoutExpired:
         return SageResult(
@@ -133,6 +142,15 @@ def classify_with_sage(
             duration=time.time() - t0,
         )
 
+    # Bytes, not text=True: on a cp1252 Windows console the docker proxy
+    # re-encodes the container output and the substituted bytes can hit
+    # cp1252's undefined slots (e.g. 0x90), raising UnicodeDecodeError in
+    # the reader thread. UTF-8 + errors="replace" can never raise, and the
+    # JSON payload is pure ASCII so it survives intact.
+    '''
+    stdout = (proc.stdout or b"").decode("utf-8", errors="replace")
+    m = re.search(r"\[.*\]", stdout, re.DOTALL)
+    '''
     # the JSON line may be prefixed by a "sage:" prompt; extract the array
     stdout = proc.stdout or ""
     m = re.search(r"\[.*\]", stdout, re.DOTALL)
