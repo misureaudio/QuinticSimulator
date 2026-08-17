@@ -163,6 +163,8 @@ def run_command(
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
+            encoding="utf-8",
+            errors="replace",
         )
     except (OSError, ValueError) as e:
         return RunResult(False, "", f"failed to start: {e}", -1,
