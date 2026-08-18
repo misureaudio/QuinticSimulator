@@ -1,0 +1,86 @@
+REVIEW VERIFICATION — galois_quintic_sextic_essay (r3 GPT review)
+SageMath 10.9 + GAP 4.11.1, 2026-08-18
+=====================================================================
+
+POINT 1: Out(A5)  [review says Out(A5)=C2, essay said Out(A5)=1]
+  GAP verify_outA5.g:
+    |A5|=60, |Aut(A5)|=120 (desc=S5)  =>  |Out(A5)| = 120/60 = 2
+    IsSimpleGroup(A5)=true
+    |S6|=720, |Aut(S6)|=1440          =>  |Out(S6)| = 2
+    S6 has TWO conjugacy classes of S5-subgroups:
+        intransitive (Stab1=S4)  and  transitive/exotic (Stab1=C5:C4=F20)
+    S6 has TWO conjugacy classes of A5-subgroups:
+        intransitive (Stab1=A4)  and  transitive (Stab1=D10)
+    An outer automorphism of S6 SWAPS the two S5-classes AND the two A5-classes
+    (intransitive<->transitive in each case).
+  VERDICT: review CORRECT. Essay's "(since Out(A5)=1)" is WRONG (Out(A5)=C2),
+    and the outer automorphism acts on the A5 classes too (it does not have
+    "no such component"). FIX the sentence.
+
+POINT 3: Bring-Jerrard "square roots only"  [review: too strong / false]
+  Sage bring_jerrard.sage (depressed quintic t^5+p t^3+q t^2+r t+s),
+  with CORRECT Newton power sums (verified numerically at p=1,q=2,r=3,s=4):
+    P1=0, P2=-2p, P3=-3q, P4=2p^2-4r, P5=5pq-5s, P6=-2p^3+3q^2+6pr
+    quadratic Tschirnhaus y=x^2+u x+v:
+        Q1=0 => v=2p/5 (linear);  Q2=0 => 2p u^2+6q u+4r-(6/5)p^2=0  (QUADRATIC)
+        => kills y^4,y^3 only; a y^2 term REMAINS  (form y^5+A y^2+B y+C)
+    naive cubic Tschirnhaus z=x^3+u x^2+v x+w:
+        Q1=0 => w=3/5 q - 2/5 p u (linear);  E2 quad, E3 cubic in (u,v)
+        resultant in v  =>  degree 6 in u   (a SEXTIC parameter equation)
+  NOTE: the first draft of this verification used the wrong Newton form
+  (P2=5p, P3=5q, ...) and was corrected; the degree-6 conclusion is unchanged
+  under the corrected power sums.
+  VERDICT: review CORRECT. "coefficients expressible by square roots only"
+    is FALSE in the naive formulation. The reduction exists but is not itself
+    a radical solution; the naive cubic route gives a degree-6 parameter eqn.
+    FIX section 7 to separate the distinct statements.
+
+POINT 8: Sage API  [review: NumberField.galois_group() HAS transitive_label]
+  Sage verify_sage_api.sage (Sage 10.9):
+    Polynomial.galois_group()  -> TransitiveGroup_with_category
+        has transitive_label : FALSE
+        has transitive_number: TRUE
+        has order, is_solvable, structure_description : TRUE
+    NumberField.galois_group() -> GaloisGroup_v2_with_category
+        has transitive_label : TRUE   (returned "5T5" for x^5-5x-5)
+        has transitive_number, order, is_solvable, structure_description,
+            number_field, is_galois : TRUE
+  VERDICT: review CORRECT. My Appendix A tested only the polynomial API and
+    was too categorical. The number-field API DOES expose transitive_label().
+    FIX Appendix A to be version- and object-specific.
+  Exact transitive labels (NumberField API) for all verified reps:
+    quintics: 5T1(C5), 5T2(D5), 5T3(C5:C4), 5T4(A5), 5T5(S5)
+    sextics:  6T1(C6), 6T2(S3), 6T3(D6), 6T5(C3xS3), 6T9(S3xS3),
+              6T11(C2xS4), 6T13((S3xS3):C2), 6T15(A6), 6T16(S6)
+
+POINTS 2,4,5,6,7,9,10,11 + "algebraic extension": accepted on the merits
+  (standard facts; no computation needed, all correct as stated in the review):
+  2  Kummer: cyclic quintic is Kummer after adjoining zeta_5 (Q(zeta_5)/Q,
+     deg 4); Q(sqrt5) is NOT the Kummer base (lacks zeta_5).
+  4  Resolvent: correct direction is  G <= H^g  (Galois group contained in a
+     conjugate of the candidate)  <=>  resolvent has a root in the base field;
+     fixed-field form: L^{H cap G} has degree [G : G cap H^g] over K and
+     collapses to K exactly when G <= H^g.
+  5  A5-vs-A6: "observed cycle types contained in {...} => transitive A5" does
+     NOT follow from a finite sample; needs a complete cycle-type set or a
+     resolvent certificate. Add the caveat.
+  6  LLL: "the LLL step makes the whole process polynomial-time" too sweeping;
+     say factorization over Q is polynomial-time via modular factorization +
+     lifting + coefficient bounds + lattice reduction (LLL).
+  7  Fixed-degree complexity: distinguish the deterministic polynomial-time
+     statement (needs a complete certificate) from the practical "sample
+     primes until identified" (not itself a deterministic poly-time proof);
+     distinguish factorization / discriminant / resolvent / exact group /
+     randomized-vs-deterministic / fixed-n-vs-variable-n.
+  9  Cryptography: rewrite as a modest application (Galois representations,
+     torsion fields, Frobenius conjugacy classes in elliptic-curve arithmetic
+     and the algebraic structures behind some cryptographic constructions; the
+     connection is via representations/field extensions, NOT via solvability
+     by radicals of low-degree polynomials).
+  10 Constructibility: n-gon constructible iff n = 2^k p1...pr with the pi
+     DISTINCT Fermat primes (Gauss-Wantzel); add the 2^k factor + "distinct".
+  11 Closing: replace "two smallest degrees at which the theory has genuine
+     content" with "the first degrees at which a nonsolvable transitive Galois
+     group occurs."
+  +  "the only extension of C is C itself" -> "the only ALGEBRAIC extension
+     of C is C itself."

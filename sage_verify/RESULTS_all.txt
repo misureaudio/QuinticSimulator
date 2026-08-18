@@ -1,0 +1,87 @@
+VERIFIED RESULTS — Galois groups of quintics & sextics
+SageMath 10.9 (sagemath/sagemath:latest) + GAP 4.11.1 (gapsystem/gap-docker:latest)
+Date: 2026-08-17/18
+================================================================================
+
+## A. Transitive subgroups of S5 (GAP, enumerate2.g) — exactly 5
+  5T1  order=5    solvable=true   C5
+  5T2  order=10   solvable=true   D10
+  5T3  order=20   solvable=true   C5:C4   (= F20 = AGL(1,5), Frobenius group)
+  5T4  order=60   solvable=false  A5
+  5T5  order=120  solvable=false  S5
+
+## B. Transitive subgroups of S6 (GAP, enumerate2.g) — exactly 16
+  6T1  order=6    C6            (solvable)
+  6T2  order=6    S3            (solvable)
+  6T3  order=12   D12           (solvable)
+  6T4  order=12   A4            (solvable)
+  6T5  order=18   C3 x S3       (solvable)
+  6T6  order=24   C2 x A4       (solvable)
+  6T7  order=24   S4            (solvable)
+  6T8  order=24   S4            (solvable; distinct transitive embedding)
+  6T9  order=36   S3 x S3       (solvable)
+  6T10 order=36   (C3 x C3):C4  (solvable)
+  6T11 order=48   C2 x S4       (solvable)
+  6T12 order=60   A5            (NON-solvable)
+  6T13 order=72   (S3 x S3):C2  (solvable)
+  6T14 order=120  S5            (NON-solvable)
+  6T15 order=360  A6            (NON-solvable)
+  6T16 order=720  S6            (NON-solvable)
+  => S5: 3 solvable, 2 non-solvable.   S6: 12 solvable, 4 non-solvable.
+
+## C. Verified quintic representatives (one per transitive type)
+  C5   order=5    x^5 + x^4 - 4x^3 - 3x^2 + 3x + 1
+                  disc=14641   frob: all primes give (5,)  [5-cycles only]
+  D5   order=10   x^5 - 5x + 12
+                  disc=64000000 (a square)  frob: (5,), (2,2,1)
+  F20  order=20   x^5 - 5
+                  disc=1953125  frob: (4,1), (5,), (2,2,1)
+  A5   order=60   x^5 - 5x^4 - 5x^3 + 4x^2 + x - 5
+                  disc=116057529 (square)  frob: (5,), (3,1,1), (2,2,1)
+  S5   order=120  x^5 - 5x - 5
+                  disc=1153125  frob: (3,2), (5,), (2,2,1), (4,1)
+  NOTE: the trinomial family x^5+a*x+b (small a,b) produced C5,D5,F20,S5
+        but NO A5 in the searched box; A5 requires square discriminant.
+
+## D. Verified sextic representatives (8 of 16 transitive types)
+  C6   order=6    x^6 - x^3 + 1           disc=-19683       frob:(6,),(3,3),(2,2,2)
+  S3   order=6    x^6 + 3                 disc=-11337408    frob:(2,2,2),(3,3)
+  D6   order=12   x^6 - 3x^3 - 1          disc=1601613      frob:(6,),(2,2,2),(2,2,1,1)
+  C3xS3 order=18  x^6 - 3x^3 + 3          disc=-177147      frob:(6,),(3,1,1,1),(2,2,2)
+  S3xS3 order=36  x^6 - 3x^3 - 3          disc=60761421     frob:(6,),(2,2,1,1)
+  C2xS4 order=48  x^6 - 3x + 5            disc=-143521875   frob:(6,),(4,2),(3,3)
+  (S3xS3):C2 order=72  x^6 - 3x + 3       disc=-9059283     frob:(6,),(3,2,1),(4,2)
+  S6   order=720  x^6 - 3x^3 - 3x - 3     disc=86383584     frob:(4,2),(3,3),(5,1),(3,2,1)
+  A6   order=360  x^6 - 4x^4 - x^3 - 3x^2 + 4x - 1
+                  disc=6235009 (square)   frob:(5,1),(4,2),(3,3),(2,2,1,1)
+  NOTE: S4 (order 24), A5-in-S6 (60), S5-in-S6 (120) not isolated in the
+        small-coefficient pools searched; their existence is from the GAP table.
+
+## E. Method notes (for the essay's computational section)
+  - Irreducibility over Q: f.is_irreducible() (mod-p + LLL).
+  - Galois group: f.galois_group() (resolvent + mod-p Frobenius + GAP).
+  - Frobenius cycle type at prime p: factor f mod p; the degrees of the
+    irreducible factors are the cycle lengths of a Frobenius conjugate.
+  - Discriminant square => G <= A_n.  A 3-cycle in a quintic with square
+    discriminant forces G = A5 (C5, D5 have no 3-cycles).
+  - Bad primes (p | disc) are skipped (repeated mod-p factors).
+
+--- CYCLE-TYPE SETS (GAP, cyc5.g / cyc6_all.g) — decisive for identification ---
+Degree 5 (no two share a cycle-type set; verified empty identical-pair check):
+  5T1 C5      : {(5)}
+  5T2 D10     : {(5),(2,2,1)}
+  5T3 C5:C4   : {(5),(2,2,1),(4,1)}
+  5T4 A5      : {(5),(3,1,1),(2,2,1)}
+  5T5 S5      : {(5),(3,1,1),(2,2,1),(4,1),(3,2)}
+Degree 6 (no two share a cycle-type set; verified empty identical-pair check):
+  6T12 A5(6pt): {(2,2,1,1),(5,1),(3,3)}          <- NO (4,2), NO (3,1,1,1)
+  6T15 A6     : {(3,1,1,1),(2,2,1,1),(5,1),(4,2),(3,3)}
+  => A5/A6 discriminator: a (4,2) or a single 3-cycle (3,1,1,1) forces A6;
+     the transitive A5 has neither.
+  6T7 S4(nat) : {(2,2,1,1),(4,2),(3,3)}
+  6T8 S4(oth) : {(2,2,1,1),(4,1,1,1),(2,2,2),(3,3)}
+  => the two S4's have DIFFERENT cycle-type sets (distinguished by cycle type;
+     the shared invariant is only the abstract group S4 + order 24).
+CONSEQUENCE: in degrees 5 and 6 the cycle-type set uniquely identifies the
+transitive group; the resolvent descent is the general engine, not a fix for a
+cycle-type collision in these two degrees.

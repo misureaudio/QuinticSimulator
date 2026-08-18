@@ -1,0 +1,30 @@
+VERIFIED by GAP 4.11.1 (gapsystem/gap-docker:latest), script enumerate2.g, 2026-08-17
+================================================================================
+Transitive subgroups of S5 (exactly 5):
+  5T1  order=5    solvable=true   desc=C5
+  5T2  order=10   solvable=true   desc=D10
+  5T3  order=20   solvable=true   desc=C5 : C4   (Frobenius group F20 = AGL(1,5))
+  5T4  order=60   solvable=false  desc=A5
+  5T5  order=120  solvable=false  desc=S5
+
+Transitive subgroups of S6 (exactly 16):
+  6T1  order=6    solvable=true   desc=C6
+  6T2  order=6    solvable=true   desc=S3
+  6T3  order=12   solvable=true   desc=D12
+  6T4  order=12   solvable=true   desc=A4
+  6T5  order=18   solvable=true   desc=C3 x S3
+  6T6  order=24   solvable=true   desc=C2 x A4
+  6T7  order=24   solvable=true   desc=S4
+  6T8  order=24   solvable=true   desc=S4   (distinct embedding of S4 in S6)
+  6T9  order=36   solvable=true   desc=S3 x S3
+  6T10 order=36   solvable=true   desc=(C3 x C3) : C4
+  6T11 order=48   solvable=true   desc=C2 x S4
+  6T12 order=60   solvable=false  desc=A5
+  6T13 order=72   solvable=true   desc=(S3 x S3) : C2
+  6T14 order=120  solvable=false  desc=S5
+  6T15 order=360  solvable=false  desc=A6
+  6T16 order=720  solvable=false  desc=S6
+
+Summary:
+  S5: 5 transitive groups, 3 solvable, 2 non-solvable (A5, S5)
+  S6: 16 transitive groups, 12 solvable, 4 non-solvable (A5, S5, A6, S6)

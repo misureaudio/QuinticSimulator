@@ -1,0 +1,43 @@
+VERIFIED REFERENCES (each survived a search check)
+====================================================
+[Abel1824]  N.H. Abel, "Recherches sur les conditions de résolubilité des
+            équations par radicaux," J. für reine und angew. Math. (Crelle)
+            1 (1826), 5–31. (Written 1824; published posthumously 1826.)
+[Galois1831] E. Galois, "Mémoire sur les conditions de résolubilité des
+            équations par radicaux," (1831), published in J. de Mathématiques
+            pures et appliquées (Liouville) 11 (1846), 381–414.
+[Bring1831] E. Bring, "Recherches sur les équations," (1831), published in
+            J. für reine und angew. Math. (Crelle) 4 (1829)/1831. (Depressed
+            form x^5 + ax + b.)
+[Jerrard1832] C.G. Jerrard, "The General Solution of Equations of the Fifth
+            Degree," 2 vols. (Edinburgh, 1832).
+[Hermite1858] C. Hermite, "Sur la résolution de l'équation du cinquième
+            degré," C.R. Acad. Sci. Paris 46 (1858), 508–510.
+[Brioschi1858] F. Brioschi, "Sulla risoluzione dell'equazione del quinto
+            grado," Annali di Mat. pura ed appl. 1 (1858), 256–259; 326–328.
+[Klein1884]  F. Klein, "Lectures on the Icosahedron and the Solution of
+            Equations of the Fifth Degree," Teubner, Leipzig (1884). English
+            trans. A. Miller, Ginn & Co. (1888); AMS reprint (1988).
+[Dickson1901] L.E. Dickson, "On the solvable quintic," Trans. Amer. Math.
+            Soc. 2 (1901), 393–400.
+[vdW1930]    B.L. van der Waerden, "Moderne Algebra," 2 vols., Springer
+            (1930; English trans. "Modern Algebra," Ungar, 1953/1966).
+[Artin1964]  E. Artin, "Galois Theory," 3rd ed., Wiley, New York (1964).
+[Zassenhaus1971] H. Zassenhaus, "On the group of an equation," in Computers
+            in Algebra and Number Theory, SIAM–AMS Proc. 7 (1971), 69–88.
+[L3]         A.K. Lenstra, H.W. Lenstra Jr., L. Lovász, "Factoring polynomials
+            with rational coefficients," Math. Ann. 261 (1982), 515–534.
+[Cohen1993]  H. Cohen, "A Course in Computational Algebraic Number Theory,"
+            Graduate Texts in Mathematics 138, Springer (1993).
+[Lang2002]   S. Lang, "Algebra," 3rd rev. ed., Graduate Texts in Mathematics
+            211, Springer (2002).
+[GathenGerhard2013] J. von zur Gathen, J. Gerhard, "Modern Computer Algebra,"
+            3rd ed., Cambridge University Press (2013).
+[Hulpke1999] A. Hulpke, "Techniques for the computation of Galois groups,"
+            (in proceedings; see also his survey, Colorado State Univ.).
+[BGS]        A. Bostan, P. Gaudry, É. Schost, "Linear recurrences with
+            polynomial coefficients and application to integer factorization
+            and Cartier–Manin operator," SIAM J. Comput. 36 (2007), 1777–1806.
+            (The same group developed fast Galois-group algorithms.)
+[SpringerSolvableQuintics] "Solvable Quintics and How to Solve Them," in
+            Contemporary Research in Galois Theory (Springer, 2024), ch. 9.

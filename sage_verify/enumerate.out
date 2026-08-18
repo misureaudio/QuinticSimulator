@@ -1,0 +1,11 @@
+ ┌───────┐   GAP 4.15.1 of 2025-10-18
+ │  GAP  │   https://www.gap-system.org
+ └───────┘   Architecture: x86_64-pc-linux-gnu-default64-kv10
+ Configuration:  gmp 6.3.0, GASMAN, readline
+ Loading the library and packages ...
+ Packages:   Alnuth 3.2.1, AutPGrp 1.11.1, CRISP 1.4.8, FactInt 1.6.3, 
+             FGA 1.5.0, GAPDoc 1.6.7, IRREDSOL 1.4.4, LAGUNA 3.9.7, 
+             PackageManager 1.6.3, Polycyclic 2.17, PrimGrp 4.0.1, 
+             SmallGrp 1.5.4, Sophus 1.27, TransGrp 3.6.5
+ Try '??help' for help. See also '?copyright', '?cite' and '?authors'
+[1m[34mgap> [0m[31m
